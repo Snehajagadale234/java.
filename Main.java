@@ -1,41 +1,49 @@
-// Abstract class
-abstract class Shape {
-    double dim1;
-    double dim2;
+// Superclass
+class BankAccount {
+    protected double balance;
 
     // Constructor
-    Shape(double dim1, double dim2) {
-        this.dim1 = dim1;
-        this.dim2 = dim2;
+    BankAccount(double balance) {
+        this.balance = balance;
     }
 
-    // Abstract method
-    abstract double area();
+    // Deposit method
+    void deposit(double amount) {
+        balance = balance + amount;
+        System.out.println("Deposited: " + amount);
+        System.out.println("Current Balance: " + balance);
+    }
+
+    // Withdraw method
+    void withdraw(double amount) {
+        if (amount <= balance) {
+            balance = balance - amount;
+            System.out.println("Withdrawn: " + amount);
+        } else {
+            System.out.println("Insufficient balance.");
+        }
+        System.out.println("Current Balance: " + balance);
+    }
 }
 
-// Rectangle class
-class Rectangle extends Shape {
+// Subclass
+class SavingsAccount extends BankAccount {
 
-    Rectangle(double length, double width) {
-        super(length, width);
+    // Constructor
+    SavingsAccount(double balance) {
+        super(balance);
     }
 
-    // Area of Rectangle = length × width
-    double area() {
-        return dim1 * dim2;
-    }
-}
-
-// Triangle class
-class Triangle extends Shape {
-
-    Triangle(double base, double height) {
-        super(base, height);
-    }
-
-    // Area of Triangle = 1/2 × base × height
-    double area() {
-        return 0.5 * dim1 * dim2;
+    // Overriding withdraw method
+    @Override
+    void withdraw(double amount) {
+        if (balance - amount < 100) {
+            System.out.println("Withdrawal denied! Minimum balance of 100 must be maintained.");
+        } else {
+            balance = balance - amount;
+            System.out.println("Withdrawn: " + amount);
+            System.out.println("Current Balance: " + balance);
+        }
     }
 }
 
@@ -43,10 +51,10 @@ class Triangle extends Shape {
 public class Main {
     public static void main(String[] args) {
 
-        Rectangle r = new Rectangle(10, 5);
-        Triangle t = new Triangle(8, 4);
+        SavingsAccount sa = new SavingsAccount(500);
 
-        System.out.println("Area of Rectangle: " + r.area());
-        System.out.println("Area of Triangle: " + t.area());
+        sa.deposit(200);      // Deposit money
+        sa.withdraw(400);     // Valid withdrawal
+        sa.withdraw(250);     // Will be denied if balance < 100
     }
 }
